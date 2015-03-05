@@ -21,8 +21,13 @@ public class Tester2 {
 		System.out.println(((BST) Test).smallestKey(Test));
 		System.out.print("Searching for 1 : ");
 		System.out.println(((BST) Test).searchTree('1',Test));
+		System.out.print("The tree inorder: ");
 		System.out.println(Tester1.inOrder(Test));
 		
+		((BST) Test).deleteNode('4',Test);
+		System.out.print("Tree after deleting 4: ");
+		System.out.println(Tester1.inOrder(Test));
+
 	}
 
 }

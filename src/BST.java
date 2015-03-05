@@ -7,12 +7,12 @@ public class BST extends BinaryTree{
 	}
 
 	
-	public String largestKey (BinaryTree t){
+	public char largestKey (BinaryTree t){
 		if(t.emptyTree())
-			return "null";
+			return '\0';
 		else {
 			if( t.getRight().emptyTree()){
-				return t.getRoot()+"";
+				return t.getRoot();
 			}
 			else{
 				return largestKey(t.getRight());
@@ -21,12 +21,12 @@ public class BST extends BinaryTree{
 		}
 	}
 	
-	public String smallestKey (BinaryTree t){
+	public char smallestKey (BinaryTree t){
 		if(t.emptyTree())
-			return "null";
+			return '\0';
 		else {
 			if(t.getLeft().emptyTree() ){
-				return t.getRoot()+"";
+				return t.getRoot();
 			}
 			else{
 				return smallestKey(t.getLeft());
@@ -42,38 +42,14 @@ public class BST extends BinaryTree{
 			if(t.getRoot()==value)
 				return t;
 			else{
-				if(!t.getLeft().emptyTree()){
-					if(value==t.getLeft().getRoot()){
-						return t;
-					}else{
-						if(!t.getRight().emptyTree()){
-							if(value==t.getRight().getRoot())
-								return t;
-							else{
-								if(value>t.getRoot())
-									return searchTree(value,t.getRight());
-								else
-									return searchTree(value,t.getLeft());
-							}
-						}else
-							return searchTree(value,t.getLeft());
-					}
-				}else{
-					if(!t.getRight().emptyTree()){
-						if(value==t.getRight().getRoot())
-							return t;
-						else
-							return searchTree(value,t.getRight());
-					}
-					else
-						return null;
+				if(value>t.getRoot())
+						return searchTree(value,t.getRight());
+				else
+						return searchTree(value,t.getLeft());
 				
-				}
-					
-			}
 		}
 	}
-	
+}	
 	
 	
 	
@@ -98,14 +74,48 @@ public class BST extends BinaryTree{
 			}
 	}
 	public void deleteNode(char value,BinaryTree t){
-		BinaryTree subtree;
-		subtree=((BST) t).searchTree(value,t);
+		BinaryTree subtree,tempLeft,tempRight;
+		char newParent;
+		subtree=searchTree(value,t);
 		if(subtree==null){
 			System.out.println("Node not found");
 		}else{
-			if(subtree.getLeft().emptyTree() && subtree.getRight().emptyTree()){
-				
+			if(subtree.getRoot()==value){
+					if(subtree.getLeft().emptyTree() && subtree.getRight().emptyTree()){
+						subtree.root=null;
+						
+					}
+					else{
+						if(subtree.getLeft().emptyTree()){
+							tempLeft=subtree.getRight().getLeft().copyTree();
+							tempRight=subtree.getRight().getRight().copyTree();
+							subtree.root=new Node (subtree.getRight().getRight().getRoot());
+							subtree.root.setLeftChild(tempLeft);
+							subtree.root.setRightChild(tempRight);
+						}else{
+							if(subtree.getRight().emptyTree()){
+								tempLeft=subtree.getLeft().getLeft().copyTree();
+								tempRight=subtree.getLeft().getRight().copyTree();
+								subtree.root=new Node (subtree.getRight().getLeft().getRoot());
+								subtree.root.setLeftChild(tempLeft);
+								subtree.root.setRightChild(tempRight);
+							}else{
+								newParent=smallestKey(subtree.getRight());
+								tempLeft=subtree.getLeft().copyTree();
+								deleteNode(newParent,subtree.getRight());
+								tempRight=subtree.getRight().copyTree();
+								subtree.root=new Node(newParent);
+								subtree.root.setLeftChild(tempLeft);
+								subtree.root.setRightChild(tempRight);
+							}
+						}
+						
+						
+						
+					}
 			}
-		}
+			
 	}
+		
+}
 }
